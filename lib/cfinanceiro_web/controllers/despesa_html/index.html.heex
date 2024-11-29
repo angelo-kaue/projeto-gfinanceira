@@ -1,0 +1,25 @@
+<.header>
+  Listing Despesas
+  <:actions>
+    <.link href={~p"/despesas/new"}>
+      <.button>New Despesa</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table id="despesas" rows={@despesas} row_click={&JS.navigate(~p"/despesas/#{&1}")}>
+  <:col :let={despesa} label="Descricao"><%= despesa.descricao %></:col>
+  <:col :let={despesa} label="Valor"><%= despesa.valor %></:col>
+  <:col :let={despesa} label="Data"><%= despesa.data %></:col>
+  <:action :let={despesa}>
+    <div class="sr-only">
+      <.link navigate={~p"/despesas/#{despesa}"}>Show</.link>
+    </div>
+    <.link navigate={~p"/despesas/#{despesa}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={despesa}>
+    <.link href={~p"/despesas/#{despesa}"} method="delete" data-confirm="Are you sure?">
+      Delete
+    </.link>
+  </:action>
+</.table>
