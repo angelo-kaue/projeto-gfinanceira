@@ -4,9 +4,9 @@ defmodule CfinanceiroWeb.ReceitaController do
   alias Cfinanceiro.Finance
   alias Cfinanceiro.Finance.Receita
 
-  def index(conn, _params) do
-    receitas = Finance.list_receitas()
-    render(conn, :index, receitas: receitas)
+  def index(conn, params) do
+    receitas = Finance.list_receitas(params)
+    render(conn, :index, receitas: receitas, params: params)
   end
 
   def new(conn, _params) do
@@ -18,7 +18,7 @@ defmodule CfinanceiroWeb.ReceitaController do
     case Finance.create_receita(receita_params) do
       {:ok, receita} ->
         conn
-        |> put_flash(:info, "Receita created successfully.")
+        |> put_flash(:info, "Receita criada com sucesso.")
         |> redirect(to: ~p"/receitas/#{receita}")
 
       {:error, %Ecto.Changeset{} = changeset} ->
@@ -43,7 +43,7 @@ defmodule CfinanceiroWeb.ReceitaController do
     case Finance.update_receita(receita, receita_params) do
       {:ok, receita} ->
         conn
-        |> put_flash(:info, "Receita updated successfully.")
+        |> put_flash(:info, "Receita atualizada com sucesso.")
         |> redirect(to: ~p"/receitas/#{receita}")
 
       {:error, %Ecto.Changeset{} = changeset} ->
@@ -56,7 +56,7 @@ defmodule CfinanceiroWeb.ReceitaController do
     {:ok, _receita} = Finance.delete_receita(receita)
 
     conn
-    |> put_flash(:info, "Receita deleted successfully.")
+    |> put_flash(:info, "Receita excluída com sucesso.")
     |> redirect(to: ~p"/receitas")
   end
 end
