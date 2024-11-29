@@ -1,25 +1,45 @@
 <.header>
-  Listing Despesas
+  Despesas Listadas
   <:actions>
     <.link href={~p"/despesas/new"}>
-      <.button>New Despesa</.button>
+      <.button>Nova Despesa</.button>
     </.link>
   </:actions>
 </.header>
 
+<form method="get" action={~p"/despesas"}>
+  <div>
+    <label for="filter_month">Filtrar por mês:</label>
+    <input type="month" name="filter_month" value={@params["filter_month"] || ""}>
+  </div>
+  <div>
+    <label for="start_date">Data inicial:</label>
+    <input type="date" name="start_date" value={@params["start_date"] || ""}>
+    <label for="end_date">Data final:</label>
+    <input type="date" name="end_date" value={@params["end_date"] || ""}>
+  </div>
+  <div>
+    <label for="order">Ordenar por:</label>
+    <select name="order">
+      <option value="" selected={@params["order"] == ""}>Selecione</option>
+      <option value="asc" selected={@params["order"] == "asc"}>Menores valores</option>
+      <option value="desc" selected={@params["order"] == "desc"}>Maiores valores</option>
+    </select>
+  </div>
+  <button type="submit">Aplicar Filtros</button>
+</form>
+
+
 <.table id="despesas" rows={@despesas} row_click={&JS.navigate(~p"/despesas/#{&1}")}>
-  <:col :let={despesa} label="Descricao"><%= despesa.descricao %></:col>
+  <:col :let={despesa} label="Descrição"><%= despesa.descricao %></:col>
   <:col :let={despesa} label="Valor"><%= despesa.valor %></:col>
   <:col :let={despesa} label="Data"><%= despesa.data %></:col>
   <:action :let={despesa}>
-    <div class="sr-only">
-      <.link navigate={~p"/despesas/#{despesa}"}>Show</.link>
-    </div>
-    <.link navigate={~p"/despesas/#{despesa}/edit"}>Edit</.link>
+    <.link navigate={~p"/despesas/#{despesa}/edit"}>Editar</.link>
   </:action>
   <:action :let={despesa}>
-    <.link href={~p"/despesas/#{despesa}"} method="delete" data-confirm="Are you sure?">
-      Delete
+    <.link href={~p"/despesas/#{despesa}"} method="delete" data-confirm="Tem certeza?">
+      Excluir
     </.link>
   </:action>
 </.table>

@@ -4,9 +4,9 @@ defmodule CfinanceiroWeb.DespesaController do
   alias Cfinanceiro.Finance
   alias Cfinanceiro.Finance.Despesa
 
-  def index(conn, _params) do
-    despesas = Finance.list_despesas()
-    render(conn, :index, despesas: despesas)
+  def index(conn, params) do
+    despesas = Finance.list_despesas(params)
+    render(conn, :index, despesas: despesas, params: params)
   end
 
   def new(conn, _params) do
@@ -18,7 +18,7 @@ defmodule CfinanceiroWeb.DespesaController do
     case Finance.create_despesa(despesa_params) do
       {:ok, despesa} ->
         conn
-        |> put_flash(:info, "Despesa created successfully.")
+        |> put_flash(:info, "Despesa criada com sucesso.")
         |> redirect(to: ~p"/despesas/#{despesa}")
 
       {:error, %Ecto.Changeset{} = changeset} ->
@@ -43,7 +43,7 @@ defmodule CfinanceiroWeb.DespesaController do
     case Finance.update_despesa(despesa, despesa_params) do
       {:ok, despesa} ->
         conn
-        |> put_flash(:info, "Despesa updated successfully.")
+        |> put_flash(:info, "Despesa atualizada com sucesso.")
         |> redirect(to: ~p"/despesas/#{despesa}")
 
       {:error, %Ecto.Changeset{} = changeset} ->
@@ -56,7 +56,7 @@ defmodule CfinanceiroWeb.DespesaController do
     {:ok, _despesa} = Finance.delete_despesa(despesa)
 
     conn
-    |> put_flash(:info, "Despesa deleted successfully.")
+    |> put_flash(:info, "Despesa excluída com sucesso.")
     |> redirect(to: ~p"/despesas")
   end
 end
