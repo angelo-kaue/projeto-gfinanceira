@@ -29,7 +29,6 @@
   <button type="submit">Aplicar Filtros</button>
 </form>
 
-
 <.table id="despesas" rows={@despesas} row_click={&JS.navigate(~p"/despesas/#{&1}")}>
   <:col :let={despesa} label="Descrição"><%= despesa.descricao %></:col>
   <:col :let={despesa} label="Valor"><%= despesa.valor %></:col>
