@@ -1,44 +1,73 @@
-<.header>
-  Despesas Listadas
-  <:actions>
-    <.link href={~p"/despesas/new"}>
-      <.button>Nova Despesa</.button>
-    </.link>
-  </:actions>
-</.header>
+<div class="navbar">
+  <h2>Gestão Financeira</h2>
+  <nav>
+    <a href="/">Menu Principal</a>
+    <a href="/despesas">Despesas</a>
+    <a href="/receitas">Receitas</a>
+  </nav>
+</div>
 
-<form method="get" action={~p"/despesas"}>
-  <div>
+<div class="flash-messages">
+  <%= if @flash["info"] do %>
+    <div class="flash flash-info">
+      <%= @flash["info"] %>
+    </div>
+  <% end %>
+  <%= if @flash["error"] do %>
+    <div class="flash flash-error">
+      <%= @flash["error"] %>
+    </div>
+  <% end %>
+</div>
+
+<div class="container">
+  <div class="header">
+    <h1>Despesas</h1>
+    <p>Gerencie suas despesas de forma fácil e rápida.</p>
+    <a href="/despesas/new" class="button button-green">Nova Despesa</a>
+  </div>
+
+  <form method="get" action={~p"/despesas"}>
     <label for="filter_month">Filtrar por mês:</label>
     <input type="month" name="filter_month" value={@params["filter_month"] || ""}>
-  </div>
-  <div>
+    
     <label for="start_date">Data inicial:</label>
     <input type="date" name="start_date" value={@params["start_date"] || ""}>
+    
     <label for="end_date">Data final:</label>
     <input type="date" name="end_date" value={@params["end_date"] || ""}>
-  </div>
-  <div>
-    <label for="order">Ordenar por:</label>
+    
+    <label for="order">Ordenar:</label>
     <select name="order">
       <option value="" selected={@params["order"] == ""}>Selecione</option>
       <option value="asc" selected={@params["order"] == "asc"}>Menores valores</option>
       <option value="desc" selected={@params["order"] == "desc"}>Maiores valores</option>
     </select>
-  </div>
-  <button type="submit">Aplicar Filtros</button>
-</form>
+    
+    <button type="submit" class="button button-blue">Filtrar</button>
+  </form>
 
-<.table id="despesas" rows={@despesas} row_click={&JS.navigate(~p"/despesas/#{&1}")}>
-  <:col :let={despesa} label="Descrição"><%= despesa.descricao %></:col>
-  <:col :let={despesa} label="Valor"><%= despesa.valor %></:col>
-  <:col :let={despesa} label="Data"><%= despesa.data %></:col>
-  <:action :let={despesa}>
-    <.link navigate={~p"/despesas/#{despesa}/edit"}>Editar</.link>
-  </:action>
-  <:action :let={despesa}>
-    <.link href={~p"/despesas/#{despesa}"} method="delete" data-confirm="Tem certeza?">
-      Excluir
-    </.link>
-  </:action>
-</.table>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Descrição</th>
+        <th>Valor</th>
+        <th>Data</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= for despesa <- @despesas do %>
+        <tr>
+          <td><%= despesa.descricao %></td>
+          <td><%= despesa.valor %></td>
+          <td><%= despesa.data %></td>
+          <td>
+            <a href={~p"/despesas/#{despesa}/edit"} class="button button-blue">Editar</a>
+            <.link href={~p"/despesas/#{despesa}"} method="delete" class="button button-red" data-confirm="Tem certeza?">Excluir</.link>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
